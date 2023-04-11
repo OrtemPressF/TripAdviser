@@ -1,15 +1,8 @@
 public class Main {
     public static void main(String[] args) {
-        Map g = new Map(10);
-        g.addEdge(0, 1);
-        g.addEdge(0, 2);
-        g.addEdge(0, 3);
-        g.addEdge(1, 2);
-        g.addEdge(2, 4);
-
-
-        //print the DFS Traversal sequence
-        System.out.println("Depth First Traversal for given graph"+
-                "(with 0 as starting vertex)");
-        g.DFS(0);    }
+        Map graph = new Map(5); // Creates a graph with 5 vertices
+        graph.addEdge(0, 1, 2); // Adds an edge between vertex 0 and vertex 1 with weight 2
+        graph.addEdge(1, 2, 3); // Adds an edge between vertex 1 and vertex 2 with weight 3
+        graph.printMatrix();
+    }
 }

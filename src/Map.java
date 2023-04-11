@@ -1,48 +1,28 @@
-import java.io.*;
-import java.util.*;
+public class Map {
+     int[][] matrix;
+     int numVertices;
 
-//DFS Technique for undirected graph
-class Map {
-    private int Vertices;   // No. of vertices
 
-    // adjacency list declaration
-    private LinkedList<Integer> adj_list[];
-
-    // graph Constructor: to initialize adjacency lists as per no of vertices
-    Map(int v) {
-        Vertices = v;
-        adj_list = new LinkedList[v];
-        for (int i=0; i<v; ++i)
-            adj_list[i] = new LinkedList();
+    public Map(int numVertices) {
+        this.numVertices = numVertices;
+        matrix = new int[numVertices][numVertices];
     }
 
-    //add an edge to the graph
-    void addEdge(int v, int w) {
-        adj_list[v].add(w);  // Add w to v's list.
+    public void addEdge(int source, int destination, int weight) {
+        matrix[source][destination] = weight;
+        matrix[destination][source] = weight;; // If the graph is undirected, add this line as well
     }
 
-    // helper function for DFS technique
-    void DFS_helper(int v,boolean visited[]) {
-        // current node is visited
-        visited[v] = true;
-        System.out.print(v+" ");
+    public int getEdgeWeight(int source, int destination) {
+        return matrix[source][destination];
+    }
 
-        // process all adjacent vertices
-        Iterator<Integer> i = adj_list[v].listIterator();
-        while (i.hasNext())
-        {
-            int n = i.next();
-            if (!visited[n])
-                DFS_helper(n, visited);
+    public void printMatrix() {
+        for (int i = 0; i < numVertices; i++) {
+            for (int j = 0; j < numVertices; j++) {
+                System.out.print(matrix[i][j] + " ");
+            }
+            System.out.println();
         }
-    }
-
-
-    void DFS(int v) {
-        //initially none of the vertices are visited
-        boolean visited[] = new boolean[Vertices];
-
-        // call recursive DFS_helper function for DFS technique
-        DFS_helper(v, visited);
     }
 }
