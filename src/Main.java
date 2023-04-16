@@ -10,7 +10,7 @@ public class Main {
         graph.setVertexName(2, "Park");
         graph.setVertexName(3, "Restaurant");
         graph.setVertexName(4, "Museum");
-        graph.setVertexName(5, "Nature");
+        graph.setVertexName(5, "Museum");
 //        graph.setVertexName(6, "Park");
 //        graph.setVertexName(7, "Nature");
 //        graph.setVertexName(8, "Restaurant");
@@ -38,13 +38,16 @@ public class Main {
         graph.addEdge(0, 1, 1);
         graph.addEdge(1, 2, 3);
         graph.addEdge(1, 3, 2);
+        graph.addEdge(1, 4, 7);
         graph.addEdge(2, 3, 5);
         graph.addEdge(3, 4, 4);
         graph.addEdge(4, 5, 6);
+        graph.addEdge(3, 5, 6);
+
 
 
         graph.printMatrix(); // Prints the adjacency matrix
-        graph.findFastestPathThroughAllOfType(0, "Museum");
+        graph.findFastestPathToAllOfType(0, "Museum");
 
 
     }

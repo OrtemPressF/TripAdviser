@@ -33,21 +33,23 @@ public class Map {
         return names[vertex];
     }
 
-    public void findFastestPathThroughAllOfType(int startVertex, String vertexType) {
+    public void findFastestPathToAllOfType(int startVertex, String vertexType) {
         PriorityQueue<Integer> queue = new PriorityQueue<>(Comparator.comparingInt(i -> distances[i]));
-        int[] distances = new int[numVertices];
         Arrays.fill(distances, Integer.MAX_VALUE);
         boolean[] visited = new boolean[numVertices];
         distances[startVertex] = 0;
         queue.add(startVertex);
 
-        while (!queue.isEmpty()) {
+        int numFound = 0; // initialize the number of objects found to zero
+
+        while (!queue.isEmpty() && numFound < numVertices) {
             int currentVertex = queue.poll();
             if (visited[currentVertex]) {
                 continue;
             }
             visited[currentVertex] = true;
             if (names[currentVertex].equals(vertexType)) {
+                numFound++; // increment the number of objects found
                 System.out.println("Distance to " + vertexType + " at vertex " + currentVertex + ": " + distances[currentVertex]);
             }
             for (int neighbor = 0; neighbor < numVertices; neighbor++) {
@@ -61,6 +63,7 @@ public class Map {
                 }
             }
         }
+        System.out.println("Total distance to all " + vertexType + " objects: " + distances[numVertices-1]);
     }
     public void printMatrix() {
         for (int i = 0; i < numVertices; i++) {
