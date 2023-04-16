@@ -28,25 +28,39 @@ public class Map {
         return names[vertex];
     }
 
-    public void traverseFromVertexOfType(int startVertex, String vertexType) {
+    public void findFastestPathThroughAllOfType(int startVertex, String vertexType) {
         boolean[] visited = new boolean[numVertices];
         Stack<Integer> stack = new Stack<>();
         stack.push(startVertex);
 
+        int[] distances = new int[numVertices];
+        for (int i = 0; i < numVertices; i++) {
+            distances[i] = Integer.MAX_VALUE;
+        }
+        distances[startVertex] = 0;
+
         while (!stack.empty()) {
             int currentVertex = stack.pop();
             visited[currentVertex] = true;
-            System.out.print(names[currentVertex] + " -> ");
 
             for (int neighbor = 0; neighbor < numVertices; neighbor++) {
-                if (matrix[currentVertex][neighbor] != 0 && !visited[neighbor] && names[neighbor].equals(vertexType)) {
+                int weight = matrix[currentVertex][neighbor];
+                if (weight != 0 && !visited[neighbor] && names[neighbor].equals(vertexType)) {
+                    int newDistance = distances[currentVertex] + weight;
+                    if (newDistance < distances[neighbor]) {
+                        distances[neighbor] = newDistance;
+                    }
                     stack.push(neighbor);
                 }
             }
         }
-        System.out.println();
-    }
 
+        for (int i = 0; i < numVertices; i++) {
+            if (names[i].equals(vertexType)) {
+                System.out.println("Distance to " + vertexType + " at vertex " + i + ": " + distances[i]);
+            }
+        }
+    }
 
     public void printMatrix() {
         for (int i = 0; i < numVertices; i++) {
@@ -57,4 +71,3 @@ public class Map {
         }
     }
 }
-
