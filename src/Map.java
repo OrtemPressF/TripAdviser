@@ -1,14 +1,19 @@
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.PriorityQueue;
 import java.util.Stack;
 
 public class Map {
-    int[][] matrix;
-    String[] names;
-    int numVertices;
+    private int numVertices;
+    private int[][] matrix;
+    private String[] names;
+    private int[] distances; // declare distances as an instance variable
 
     public Map(int numVertices) {
         this.numVertices = numVertices;
         matrix = new int[numVertices][numVertices];
         names = new String[numVertices];
+        distances = new int[numVertices]; // initialize distances array
     }
 
     public void addEdge(int source, int destination, int weight) {
@@ -29,39 +34,34 @@ public class Map {
     }
 
     public void findFastestPathThroughAllOfType(int startVertex, String vertexType) {
-        boolean[] visited = new boolean[numVertices];
-        Stack<Integer> stack = new Stack<>();
-        stack.push(startVertex);
-
+        PriorityQueue<Integer> queue = new PriorityQueue<>(Comparator.comparingInt(i -> distances[i]));
         int[] distances = new int[numVertices];
-        for (int i = 0; i < numVertices; i++) {
-            distances[i] = Integer.MAX_VALUE;
-        }
+        Arrays.fill(distances, Integer.MAX_VALUE);
+        boolean[] visited = new boolean[numVertices];
         distances[startVertex] = 0;
+        queue.add(startVertex);
 
-        while (!stack.empty()) {
-            int currentVertex = stack.pop();
+        while (!queue.isEmpty()) {
+            int currentVertex = queue.poll();
+            if (visited[currentVertex]) {
+                continue;
+            }
             visited[currentVertex] = true;
-
+            if (names[currentVertex].equals(vertexType)) {
+                System.out.println("Distance to " + vertexType + " at vertex " + currentVertex + ": " + distances[currentVertex]);
+            }
             for (int neighbor = 0; neighbor < numVertices; neighbor++) {
                 int weight = matrix[currentVertex][neighbor];
-                if (weight != 0 && !visited[neighbor] && names[neighbor].equals(vertexType)) {
+                if (weight != 0 && !visited[neighbor]) {
                     int newDistance = distances[currentVertex] + weight;
                     if (newDistance < distances[neighbor]) {
                         distances[neighbor] = newDistance;
+                        queue.add(neighbor);
                     }
-                    stack.push(neighbor);
                 }
             }
         }
-
-        for (int i = 0; i < numVertices; i++) {
-            if (names[i].equals(vertexType)) {
-                System.out.println("Distance to " + vertexType + " at vertex " + i + ": " + distances[i]);
-            }
-        }
     }
-
     public void printMatrix() {
         for (int i = 0; i < numVertices; i++) {
             for (int j = 0; j < numVertices; j++) {
