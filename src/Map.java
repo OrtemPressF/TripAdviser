@@ -38,6 +38,8 @@ public class Map {
     public void findFastestPathToAllOfType(int startVertex, String vertexType) {
         PriorityQueue<Integer> queue = new PriorityQueue<>(Comparator.comparingInt(i -> distances[i]));
         Arrays.fill(distances, Integer.MAX_VALUE);
+        int[] parent = new int[numVertices];
+        Arrays.fill(parent, -1); // initialize parent array to -1
         boolean[] visited = new boolean[numVertices];
         distances[startVertex] = 0;
         queue.add(startVertex);
@@ -58,7 +60,19 @@ public class Map {
                 } else if (distances[currentVertex] > minDistance) {
                     minDistance = distances[currentVertex];
                 }
-                System.out.println("Distance to " + vertexType + " at vertex " + currentVertex + ": " + distances[currentVertex]);
+                // print path to target vertex
+                System.out.print("Path to " + vertexType + " at vertex " + currentVertex + ": ");
+                Stack<Integer> path = new Stack<>();
+                int v = currentVertex;
+                while (v != startVertex) {
+                    path.push(v);
+                    v = parent[v];
+                }
+                path.push(startVertex);
+                while (!path.isEmpty()) {
+                    System.out.print(getVertexName(path.pop()) + " ");
+                }
+                System.out.println();
             }
             for (int neighbor = 0; neighbor < numVertices; neighbor++) {
                 int weight = matrix[currentVertex][neighbor];
@@ -66,6 +80,7 @@ public class Map {
                     int newDistance = distances[currentVertex] + weight;
                     if (newDistance < distances[neighbor]) {
                         distances[neighbor] = newDistance;
+                        parent[neighbor] = currentVertex; // update parent of neighbor
                         queue.add(neighbor);
                     }
                 }
