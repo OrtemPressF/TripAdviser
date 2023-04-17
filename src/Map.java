@@ -4,16 +4,18 @@ import java.util.PriorityQueue;
 import java.util.Stack;
 
 public class Map {
-    private int numVertices;
-    private int[][] matrix;
-    private String[] names;
+    int[][] matrix;
+    String[] names;
+    int numVertices;
     private int[] distances; // declare distances as an instance variable
+
 
     public Map(int numVertices) {
         this.numVertices = numVertices;
         matrix = new int[numVertices][numVertices];
         names = new String[numVertices];
         distances = new int[numVertices]; // initialize distances array
+
     }
 
     public void addEdge(int source, int destination, int weight) {
@@ -40,7 +42,8 @@ public class Map {
         distances[startVertex] = 0;
         queue.add(startVertex);
 
-        int numFound = 0; // initialize the number of objects found to zero
+        int numFound = 0;
+        int minDistance = 0; // initialize to 0
 
         while (!queue.isEmpty() && numFound < numVertices) {
             int currentVertex = queue.poll();
@@ -49,7 +52,12 @@ public class Map {
             }
             visited[currentVertex] = true;
             if (names[currentVertex].equals(vertexType)) {
-                numFound++; // increment the number of objects found
+                numFound++;
+                if (numFound == 1) {
+                    minDistance = distances[currentVertex]; // initialize minDistance to the first park object found
+                } else if (distances[currentVertex] > minDistance) {
+                    minDistance = distances[currentVertex];
+                }
                 System.out.println("Distance to " + vertexType + " at vertex " + currentVertex + ": " + distances[currentVertex]);
             }
             for (int neighbor = 0; neighbor < numVertices; neighbor++) {
@@ -63,8 +71,14 @@ public class Map {
                 }
             }
         }
-        System.out.println("Total distance to all " + vertexType + " objects: " + distances[numVertices-1]);
+        if (numFound > 0) {
+            System.out.println("Total distance to all " + vertexType + " objects: " + minDistance);
+        } else {
+            System.out.println("No " + vertexType + " objects found.");
+        }
     }
+
+
     public void printMatrix() {
         for (int i = 0; i < numVertices; i++) {
             for (int j = 0; j < numVertices; j++) {
